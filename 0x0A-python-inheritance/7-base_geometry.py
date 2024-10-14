@@ -1,23 +1,20 @@
 #!/usr/bin/python3
-"""
-Write a class BaseGeometry and add def area,
-def integer_validator where validates value with TypeError
-and ValueError
-"""
+"""Defines class BaseGeometry."""
 
 
 class BaseGeometry:
-    """
-    add integer validator to anterior task
-    """
+    """Class body."""
+
     def area(self):
-        """raise Exception"""
+        """Not implemented."""
         raise Exception("area() is not implemented")
 
     def integer_validator(self, name, value):
-        """ check TypeError and ValueError"""
-        if type(value) is not int:
-            raise TypeError(name + " must be an integer")
-
+        """Validate a parameter format.
+            TypeError: If value is not an integer.
+            ValueError: If value is <= 0.
+        """
+        if type(value) != int:
+            raise TypeError("{} must be an integer".format(name))
         if value <= 0:
-            raise ValueError(name + " must be greater than 0")
+            raise ValueError("{} must be greater than 0".format(name))
