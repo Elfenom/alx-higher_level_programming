@@ -1,134 +1,148 @@
 #!/usr/bin/python3
-"""Rectangle class implement Base class """
+"""
+    Rectangle class Module
+"""
 
 
 from models.base import Base
 
 
 class Rectangle(Base):
-    """ rectangle class implement Base class
     """
-
+        Defines the Rectangle subclass of Base
+    """
     def __init__(self, width, height, x=0, y=0, id=None):
+        """
+            Initialization attributes of the Rectangle class
+        """
+        super().__init__(id)
         self.width = width
         self.height = height
         self.x = x
         self.y = y
-        super().__init__(id)
 
     @property
     def width(self):
         """
-            Returning private attribute (__width)
+            width getter
         """
         return self.__width
 
     @width.setter
     def width(self, value):
         """
-            Setting private attribute (__width)
+            width setter
         """
-        self.setter_validation("width", value)
+        if type(value) is not int:
+            raise TypeError("width must be an integer")
+        if value <= 0:
+            raise ValueError("width must be > 0")
         self.__width = value
 
     @property
     def height(self):
         """
-            Returning private attribute (___height)
+            height getter
         """
         return self.__height
 
     @height.setter
     def height(self, value):
         """
-            Setting private attribute (__height)
+            height setter
         """
-        self.setter_validation("height", value)
+        if type(value) is not int:
+            raise TypeError("height must be an integer")
+        if value <= 0:
+            raise ValueError("height must be > 0")
         self.__height = value
 
     @property
     def x(self):
         """
-            Returning private attribute (__x)
+            x getter
         """
         return self.__x
 
     @x.setter
     def x(self, value):
         """
-            Setting private attribute (__x)
+            x setter
         """
-        self.setter_validation("x", value)
+        if type(value) is not int:
+            raise TypeError("x must be an integer")
+        if value < 0:
+            raise ValueError("x must be >= 0")
         self.__x = value
 
     @property
     def y(self):
         """
-            Returning private attribute (__y)
+            y getter
         """
         return self.__y
 
     @y.setter
     def y(self, value):
         """
-            Setting private attribute (__y)
+            y setter
         """
-        self.setter_validation("y", value)
+        if type(value) is not int:
+            raise TypeError("y must be an integer")
+        if value < 0:
+            raise ValueError("y must be >= 0")
         self.__y = value
 
     def area(self):
         """
-            Returns the area of the rectangle (height * width)
+            returns the area of the rectangle
         """
-        return (self.height * self.width)
+        return self.width * self.height
 
     def display(self):
         """
-            Prints to stdout the representation of the rectangle
+            Prints the rectangle instance to stdout using
+            the '#' character
         """
-        rectangle = ""
-        print("\n" * self.y, end="")
-        for i in range(self.height):
-            rectangle += (" " * self.x) + ("#" * self.width) + "\n"
-        print(rectangle, end="")
+        print("\n" * self.y +
+              "\n".join(" " * self.x + "#" * self.width
+                        for i in range(self.height)))
+
+    def __str__(self):
+        """
+            Prints the rectangle attributes in the format
+            '[Rectangle] (<id>) <x>/<y> - <width>/<height>'
+        """
+        msg = "[Rectangle] ({}) {:d}/{:d} - {:d}/{:d}"
+        return msg.format(self.id, self.x, self.y, self.width, self.height)
 
     def update(self, *args, **kwargs):
         """
-            Updates the arguments props in the class
+            Updates class attributes by assigning key/value argument to them
         """
-        if len(args) == 0:
-            for key, val in kwargs.items():
-                self.__setattr__(key, val)
-            return
-        try:
-            self.id = args[0]
-            self.width = args[1]
-            self.height = args[2]
-            self.x = args[3]
-            self.y = args[4]
-        except IndexError:
-            pass
+
+        attributes = ["id", "width", "height", "x", "y"]
+        for arg in range(len(args)):
+            for attr in range(len(attributes)):
+                if attr != arg:
+                    setattr(self, attributes[attr], args[arg])
+                    break
+
+        if not args or len(args) == 0:
+            for key, value in kwargs.items():
+                for attr in range(len(attributes)):
+                    if key == attributes[attr]:
+                        setattr(self, attributes[attr], value)
+                        break
 
     def to_dictionary(self):
         """
-            Returns a dictionary representation of this class
+            Returns dictionary representation of a Rectangle
         """
-        return {'x': getattr(self, "x"),
-                'y': getattr(self, "y"),
-                'id': getattr(self, "id"),
-                'height': getattr(self, "height"),
-                'width': getattr(self, "width")}
-
-    @staticmethod
-    def setter_validation(attribute, value):
-        if type(value) != int:
-            raise TypeError("{} must be an integer".format(attribute))
-        if attribute == "x" or attribute == "y":
-            if value < 0:
-                raise ValueError("{} must be >= 0".format(attribute))
-        elif value <= 0:
-            raise ValueError("{} must be > 0".format(attribute))
-
-    def __str__(self):
-        return "[Rectangle] ({}) {}/{} - {}/{}".format(self.id, self.x, self.y,
-                                                       self.width, self.height)
+        d_rep = {}
+        d_rep["id"] = self.id
+        d_rep["width"] = self.width
+        d_rep["height"] = self.height
+        d_rep["x"] = self.x
+        d_rep["y"] = self.y
+        return d_rep

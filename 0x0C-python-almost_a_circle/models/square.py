@@ -1,64 +1,72 @@
 #!/usr/bin/python3
-"""Define Square class implement Rectangle
 """
+    Square class Module
+"""
+
 
 from models.rectangle import Rectangle
 
 
 class Square(Rectangle):
-    """Square class body
-"""
-
+    """
+        Defines the Square subclass of Rectangle
+    """
     def __init__(self, size, x=0, y=0, id=None):
-        """Initialization class props in constructor
+        """
+            Initialization attributes of the Rectangle class
         """
         super().__init__(size, size, x, y, id)
+        self.size = size
 
     @property
     def size(self):
-        """ return width size
+        """
+            size getter
         """
         return self.width
 
     @size.setter
     def size(self, value):
-        """module Square height and width
+        """
+            size setter
         """
         self.width = value
         self.height = value
 
     def __str__(self):
-        """Square class string
         """
-        return "[Square] ({:d}) {:d}/{:d} - {:d}".format(self.id,
-                                                         self.x,
-                                                         self.y,
-                                                         self.width)
+            Prints the square attributes in the format
+            '[Square] (<id>) <x>/<y> - <width>/<height>'
+        """
+        msg = "[Square] ({}) {:d}/{:d} - {:d}"
+        return msg.format(self.id, self.x, self.y, self.size)
 
     def update(self, *args, **kwargs):
-        """update square props
         """
-        if len(args):
-            for i, arg in enumerate(args):
-                if i == 0:
-                    self.id = arg
-                elif i == 1:
-                    self.size = arg
-                elif i == 2:
-                    self.x = arg
-                elif i == 3:
-                    self.y = arg
-        else:
+            Updates class attributes by assigning key/value argument to them
+        """
+
+        attributes = ["id", "size", "x", "y"]
+        for arg in range(len(args)):
+            for attr in range(len(attributes)):
+                if attr == arg:
+                    setattr(self, attributes[attr], args[arg])
+                    break
+
+        if not args or len(args) == 0:
             for key, value in kwargs.items():
-                if hasattr(self, key) is True:
-                    setattr(self, key, value)
+                for attr in range(len(attributes)):
+                    if key == attributes[attr]:
+                        setattr(self, attributes[attr], value)
+                        break
 
     def to_dictionary(self):
-        """ return dict of class props
         """
-        return {
-            "id": self.id,
-            "size": self.size,
-            "x": self.x,
-            "y": self.y
-        }
+            Returns dictionary representation of a Square
+        """
+        d_rep = {}
+        d_rep["id"] = self.id
+        d_rep["size"] = self.size
+        d_rep["x"] = self.x
+        d_rep["y"] = self.y
+        return d_rep
